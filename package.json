@@ -1,0 +1,22 @@
+{
+  "name": "insomna-plugin-run-folder",
+  "version": "1.0.0",
+  "author": "Daniel Castro <castromd@tcd.ie>",
+  "license": "MIT",
+  "description": "",
+  "repository": "github:taschenuhr/insomnia-plugin-otherrequest",
+  "main": "run-folder.js",
+  "insomnia": {                    
+    "name": "run-folder",
+    "description": "This plugin adds an option to each folder's drop-down menu so that all requests within can be ran at once. The original code was taken from https://support.insomnia.rest/article/26-plugins#folder-actions and the author is Greg Schier, creator of insomnia.rest."
+  },
+  "keywords": [
+    "insomnia",
+    "plugin",
+    "plugins",
+    "request",
+    "requests",
+    "folder",
+    "directory"
+  ]
+}
