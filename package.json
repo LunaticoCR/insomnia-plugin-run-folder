@@ -4,7 +4,7 @@
   "author": "Daniel Castro <castromd@tcd.ie>",
   "license": "MIT",
   "description": "",
-  "repository": "github:taschenuhr/insomnia-plugin-otherrequest",
+  "repository": "github:LunaticoCR/insomnia-plugin-run-folder",
   "main": "run-folder.js",
   "insomnia": {                    
     "name": "run-folder",
