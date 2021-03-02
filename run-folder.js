@@ -25,7 +25,7 @@ module.exports.requestGroupActions = [
 
       const css = `table { margin: 0 auto 0 auto; }
                    th, .label--small, label > small { text-align: left; padding: 10px 10px 10px 15px !important; padding-bottom: none !important; font-size: 15px !important; border: 1px solid #4B505C; }
-                   td { border: 1px solid #4B505C; }
+                   td { border: 1px solid #4B505C; color: #828282;}
                    #td_left { text-align: left; padding: 3px 40px 3px 10px; }
                    #td_right { text-align: center; padding: 3px 3px 3px 3px; }`
       const html = `<html><head><style>${css}</style></head><body><table bgcolor="#282D35">${results.join('\n')}</table></body></html>`;
