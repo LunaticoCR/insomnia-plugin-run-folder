@@ -30,7 +30,12 @@ module.exports.requestGroupActions = [
                    #td_right { text-align: center; padding: 3px 3px 3px 3px; }`
       const html = `<html><head><style>${css}</style></head><body><table bgcolor="#282D35">${results.join('\n')}</table></body></html>`;
 
-      context.app.showGenericModalDialog('Results', { html });
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const element = doc.body;
+      
+      //context.app.showGenericModalDialog('Results', { html });
+      context.app.dialog(`Send All Requests - ${data.requestGroup.name}`, element, {
     },
   },
 ];
