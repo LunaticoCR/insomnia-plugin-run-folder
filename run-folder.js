@@ -36,6 +36,9 @@ module.exports.requestGroupActions = [
       
       //context.app.showGenericModalDialog('Results', { html });
       context.app.dialog(`Send All Requests - ${data.requestGroup.name}`, element, {
+        onHide() {
+        },
+      });
     },
   },
 ];
