@@ -1,6 +1,6 @@
 module.exports.requestGroupActions = [
   {
-    label: 'Send All Requests',
+    label: "Send All Requests",
     action: async (context, data) => {
       const { requests, requestGroup } = data;
       const results = [];
@@ -39,9 +39,16 @@ module.exports.requestGroupActions = [
 
 function createResultsDialog(results) {
   const summary = summarizeResults(results);
-  const content = results.length > 0
-    ? `<div class="run-folder-table-wrapper">
+  const content =
+    results.length > 0
+      ? `<div class="run-folder-table-wrapper">
          <table class="run-folder-table">
+           <colgroup>
+             <col class="run-folder-col-request" />
+             <col class="run-folder-col-status" />
+             <col class="run-folder-col-time" />
+             <col class="run-folder-col-size" />
+           </colgroup>
            <thead>
              <tr>
                <th>Request</th>
@@ -51,11 +58,11 @@ function createResultsDialog(results) {
              </tr>
            </thead>
            <tbody>
-             ${results.map(renderRow).join('\n')}
+             ${results.map(renderRow).join("\n")}
            </tbody>
          </table>
        </div>`
-    : `<div class="run-folder-empty-state">This folder does not contain any runnable requests.</div>`;
+      : `<div class="run-folder-empty-state">This folder does not contain any runnable requests.</div>`;
 
   const html = `<html>
     <body>
@@ -87,7 +94,7 @@ function createResultsDialog(results) {
   </html>`;
 
   const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
+  const doc = parser.parseFromString(html, "text/html");
 
   return doc.body.firstElementChild;
 }
@@ -95,24 +102,24 @@ function createResultsDialog(results) {
 function renderRow(result) {
   const statusMeta = getStatusMeta(result.statusCode);
   const statusText = result.statusCode
-    ? `${result.statusCode} ${result.statusMessage || ''}`.trim()
+    ? `${result.statusCode} ${result.statusMessage || ""}`.trim()
     : result.statusMessage;
-  const requestName = result.requestName || 'Unnamed request';
+  const requestName = result.requestName || "Unnamed request";
 
   return `<tr>
     <td>
       <div class="run-folder-request-cell">
-        <span class="run-folder-method">${escapeHtml(result.requestMethod || 'REQ')}</span>
+        <span class="run-folder-method">${escapeHtml(result.requestMethod || "REQ")}</span>
         <span class="run-folder-request-name" title="${escapeHtml(requestName)}">${escapeHtml(requestName)}</span>
       </div>
     </td>
     <td>
       <span
         class="run-folder-status-badge"
-        title="${escapeHtml(statusText || 'No response')}"
+        title="${escapeHtml(statusText || "No response")}"
         style="--status-color: ${statusMeta.textColor}; --status-background: ${statusMeta.backgroundColor};"
       >
-        ${escapeHtml(statusText || 'No response')}
+        ${escapeHtml(statusText || "No response")}
       </span>
     </td>
     <td class="run-folder-number">${escapeHtml(formatDuration(result.elapsedTime))}</td>
@@ -121,70 +128,79 @@ function renderRow(result) {
 }
 
 function summarizeResults(results) {
-  return results.reduce((summary, result) => {
-    summary.total += 1;
+  return results.reduce(
+    (summary, result) => {
+      summary.total += 1;
 
-    if (isSuccessful(result.statusCode)) {
-      summary.successful += 1;
-    } else {
-      summary.failed += 1;
-    }
+      if (isSuccessful(result.statusCode)) {
+        summary.successful += 1;
+      } else {
+        summary.failed += 1;
+      }
 
-    if (typeof result.elapsedTime === 'number' && Number.isFinite(result.elapsedTime)) {
-      summary.totalElapsedTime += result.elapsedTime;
-    }
+      if (
+        typeof result.elapsedTime === "number" &&
+        Number.isFinite(result.elapsedTime)
+      ) {
+        summary.totalElapsedTime += result.elapsedTime;
+      }
 
-    return summary;
-  }, {
-    total: 0,
-    successful: 0,
-    failed: 0,
-    totalElapsedTime: 0,
-  });
+      return summary;
+    },
+    {
+      total: 0,
+      successful: 0,
+      failed: 0,
+      totalElapsedTime: 0,
+    },
+  );
 }
 
 function getStatusMeta(statusCode) {
-  if (typeof statusCode !== 'number') {
+  if (typeof statusCode !== "number") {
     return {
-      textColor: '#fca5a5',
-      backgroundColor: 'rgba(239, 68, 68, 0.18)',
+      textColor: "#fca5a5",
+      backgroundColor: "rgba(239, 68, 68, 0.18)",
     };
   }
 
   if (statusCode >= 200 && statusCode < 300) {
     return {
-      textColor: '#86efac',
-      backgroundColor: 'rgba(34, 197, 94, 0.16)',
+      textColor: "#86efac",
+      backgroundColor: "rgba(34, 197, 94, 0.16)",
     };
   }
 
   if (statusCode >= 300 && statusCode < 400) {
     return {
-      textColor: '#93c5fd',
-      backgroundColor: 'rgba(59, 130, 246, 0.16)',
+      textColor: "#93c5fd",
+      backgroundColor: "rgba(59, 130, 246, 0.16)",
     };
   }
 
   if (statusCode >= 400 && statusCode < 500) {
     return {
-      textColor: '#fdba74',
-      backgroundColor: 'rgba(249, 115, 22, 0.18)',
+      textColor: "#fdba74",
+      backgroundColor: "rgba(249, 115, 22, 0.18)",
     };
   }
 
   return {
-    textColor: '#fca5a5',
-    backgroundColor: 'rgba(239, 68, 68, 0.18)',
+    textColor: "#fca5a5",
+    backgroundColor: "rgba(239, 68, 68, 0.18)",
   };
 }
 
 function isSuccessful(statusCode) {
-  return typeof statusCode === 'number' && statusCode < 400;
+  return typeof statusCode === "number" && statusCode < 400;
 }
 
 function formatDuration(durationInMillis) {
-  if (typeof durationInMillis !== 'number' || !Number.isFinite(durationInMillis)) {
-    return '-';
+  if (
+    typeof durationInMillis !== "number" ||
+    !Number.isFinite(durationInMillis)
+  ) {
+    return "-";
   }
 
   if (durationInMillis < 1000) {
@@ -202,15 +218,19 @@ function formatDuration(durationInMillis) {
 }
 
 function formatBytes(bytesRead) {
-  if (typeof bytesRead !== 'number' || !Number.isFinite(bytesRead) || bytesRead < 0) {
-    return '-';
+  if (
+    typeof bytesRead !== "number" ||
+    !Number.isFinite(bytesRead) ||
+    bytesRead < 0
+  ) {
+    return "-";
   }
 
   if (bytesRead < 1024) {
     return `${bytesRead} B`;
   }
 
-  const units = ['KB', 'MB', 'GB'];
+  const units = ["KB", "MB", "GB"];
   let size = bytesRead / 1024;
   let unitIndex = 0;
 
@@ -224,27 +244,27 @@ function formatBytes(bytesRead) {
 
 function getErrorMessage(error) {
   if (!error) {
-    return 'Request failed';
+    return "Request failed";
   }
 
-  if (typeof error === 'string') {
+  if (typeof error === "string") {
     return error;
   }
 
-  if (typeof error.message === 'string' && error.message.trim()) {
+  if (typeof error.message === "string" && error.message.trim()) {
     return error.message;
   }
 
-  return 'Request failed';
+  return "Request failed";
 }
 
 function escapeHtml(value) {
   return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function getDialogCss() {
@@ -263,6 +283,7 @@ function getDialogCss() {
 
     .run-folder-root .run-folder-modal {
       width: min(960px, 92vw);
+      max-width: 100%;
       color: inherit;
     }
 
@@ -296,7 +317,8 @@ function getDialogCss() {
     }
 
     .run-folder-root .run-folder-table-wrapper {
-      overflow: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
       max-height: 60vh;
       border: 1px solid rgba(127, 127, 127, 0.28);
       border-radius: 14px;
@@ -309,11 +331,24 @@ function getDialogCss() {
       table-layout: fixed;
     }
 
+    .run-folder-root .run-folder-col-request {
+      width: auto;
+    }
+
+    .run-folder-root .run-folder-col-status {
+      width: 120px;
+    }
+
+    .run-folder-root .run-folder-col-time,
+    .run-folder-root .run-folder-col-size {
+      width: 76px;
+    }
+
     .run-folder-root .run-folder-table thead th {
       position: sticky;
       top: 0;
       z-index: 1;
-      padding: 12px 14px;
+      padding: 12px 10px;
       text-align: left;
       font-size: 12px;
       letter-spacing: 0.04em;
@@ -327,9 +362,18 @@ function getDialogCss() {
     }
 
     .run-folder-root .run-folder-table td {
-      padding: 12px 14px;
+      padding: 10px;
       border-top: 1px solid rgba(127, 127, 127, 0.16);
       vertical-align: middle;
+    }
+
+    .run-folder-root .run-folder-table th:nth-child(2),
+    .run-folder-root .run-folder-table td:nth-child(2),
+    .run-folder-root .run-folder-table th:nth-child(3),
+    .run-folder-root .run-folder-table td:nth-child(3),
+    .run-folder-root .run-folder-table th:nth-child(4),
+    .run-folder-root .run-folder-table td:nth-child(4) {
+      white-space: nowrap;
     }
 
     .run-folder-root .run-folder-request-cell {
@@ -360,7 +404,8 @@ function getDialogCss() {
     }
 
     .run-folder-root .run-folder-status-badge {
-      display: inline-block;
+      display: block;
+      width: 100%;
       max-width: 100%;
       padding: 5px 10px;
       border-radius: 999px;
